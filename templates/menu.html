@@ -1,0 +1,307 @@
+{% extends 'base.html' %}
+{% block title %}Menyu — Lazzat Restaurant{% endblock %}
+{% block nav_menu %}active{% endblock %}
+
+{% block extra_css %}
+<style>
+.menu-hero {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%);
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+}
+
+.menu-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.menu-hero p { color: var(--muted); font-size: 1rem; }
+
+/* Category Filter */
+.filter-bar {
+  background: white;
+  border-bottom: 1px solid var(--cream2);
+  position: sticky;
+  top: 72px;
+  z-index: 100;
+  padding: 1rem 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.filter-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filter-inner::-webkit-scrollbar { display: none; }
+
+.filter-btn {
+  white-space: nowrap;
+  padding: 0.6rem 1.25rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border: 2px solid var(--cream2);
+  background: white;
+  color: var(--text);
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--dark);
+  box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+}
+
+/* Products */
+.menu-section { padding: 3rem 0; }
+
+.menu-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.category-section { margin-bottom: 3rem; }
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--cream2);
+}
+
+.category-icon-big {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.category-name-big {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.category-count {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: var(--transition);
+  position: relative;
+  animation: fadeUp 0.5s ease both;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.product-img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+}
+
+.product-img-placeholder {
+  width: 100%;
+  height: 190px;
+  background: linear-gradient(135deg, #fdf0d5, #fce8b2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+}
+
+.product-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: #e74c3c;
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.product-body { padding: 1.25rem; }
+
+.product-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.4rem;
+  text-decoration: none;
+  display: block;
+}
+
+.product-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.price-sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+}
+
+.btn-cart {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--dark);
+  border: none;
+  padding: 0.6rem 1.1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(201,168,76,0.4);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--muted);
+}
+
+.empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
+.empty-state h3 { font-family: 'Playfair Display', serif; color: var(--dark); margin-bottom: 0.5rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="menu-hero">
+  <h1>🍽️ Bizning Menyu</h1>
+  <p>Barcha taomlar va narxlar — bir joyda</p>
+</div>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <a href="/menu/" class="filter-btn {% if selected_category == 'all' %}active{% endif %}">
+      🍽️ Hammasi
+    </a>
+    {% for cat in categories %}
+    <a href="/menu/?category={{ cat.id }}"
+       class="filter-btn {% if selected_category == cat.id|stringformat:'s' %}active{% endif %}">
+      {{ cat.icon }} {{ cat.name }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+<section class="menu-section">
+  <div class="menu-container">
+
+    {% if selected_category == 'all' %}
+      {% regroup products by category as category_list %}
+      {% for group in category_list %}
+      <div class="category-section">
+        <div class="category-header">
+          <div class="category-icon-big">{{ group.grouper.icon }}</div>
+          <div>
+            <div class="category-name-big">{{ group.grouper.name }}</div>
+            <div class="category-count">{{ group.list|length }} ta mahsulot</div>
+          </div>
+        </div>
+        <div class="products-grid">
+          {% for product in group.list %}
+          {% include 'partials/product_card.html' %}
+          {% endfor %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-state">
+        <div class="icon">🍽️</div>
+        <h3>Hozircha mahsulotlar yo'q</h3>
+        <p>Admin paneldan mahsulotlar qo'shing</p>
+      </div>
+      {% endfor %}
+
+    {% else %}
+      <div class="products-grid">
+        {% for product in products %}
+        {% include 'partials/product_card.html' %}
+        {% empty %}
+        <div style="grid-column:1/-1;" class="empty-state">
+          <div class="icon">🔍</div>
+          <h3>Bu kategoriyada mahsulot yo'q</h3>
+          <p>Boshqa kategoriyani tanlang</p>
+        </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

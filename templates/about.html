@@ -1,0 +1,423 @@
+{% extends 'base.html' %}
+{% block title %}Biz haqimizda — Lazzat Restaurant{% endblock %}
+{% block nav_about %}active{% endblock %}
+
+{% block extra_css %}
+<style>
+.about-hero {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 60%);
+  padding: 5rem 2rem 6rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 50%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.1), transparent 60%);
+  pointer-events: none;
+}
+
+.about-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: white;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.about-hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about-hero p {
+  color: rgba(255,255,255,0.65);
+  font-size: 1.05rem;
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.7;
+  position: relative;
+}
+
+/* Story */
+.story-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.story-img {
+  position: relative;
+}
+
+.story-img-main {
+  width: 100%;
+  aspect-ratio: 4/5;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--dark2), var(--dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8rem;
+  box-shadow: var(--shadow);
+}
+
+.story-img-badge {
+  position: absolute;
+  bottom: -1.5rem;
+  right: -1.5rem;
+  background: var(--gold);
+  color: var(--dark);
+  border-radius: 20px;
+  padding: 1.25rem 1.75rem;
+  box-shadow: 0 8px 32px rgba(201,168,76,0.4);
+}
+
+.badge-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.badge-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.story-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(201,168,76,0.12);
+  color: var(--gold);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.story-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 1.25rem;
+  line-height: 1.25;
+}
+
+.story-text {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 0.97rem;
+  margin-bottom: 1rem;
+}
+
+/* Values */
+.values-section {
+  background: var(--dark);
+  padding: 5rem 2rem;
+}
+
+.values-inner { max-width: 1200px; margin: 0 auto; }
+
+.values-header { text-align: center; margin-bottom: 3rem; }
+.values-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+.values-sub { color: var(--muted); }
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.value-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,76,0.15);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.value-card:hover {
+  background: rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.35);
+  transform: translateY(-4px);
+}
+
+.value-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.value-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+}
+
+.value-desc { color: rgba(255,255,255,0.55); font-size: 0.88rem; line-height: 1.6; }
+
+/* Team */
+.team-section {
+  max-width: 1200px;
+  margin: 5rem auto;
+  padding: 0 2rem;
+}
+
+.team-header { text-align: center; margin-bottom: 3rem; }
+
+.team-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.team-card {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  transition: var(--transition);
+  text-align: center;
+}
+
+.team-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.12); }
+
+.team-avatar {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, var(--cream2), var(--cream));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6rem;
+}
+
+.team-body { padding: 1.5rem; }
+
+.team-role {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+
+.team-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.team-bio { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+/* Stats row */
+.stats-row {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  padding: 3rem 2rem;
+}
+
+.stats-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+
+.stat-item {}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--dark);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(26,16,8,0.65);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 0.3rem;
+}
+
+@media (max-width: 900px) {
+  .story-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .values-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-hero">
+  <h1>Biz kim <em>ekanmiz</em>?</h1>
+  <p>15 yillik an'ana, yuraklardan tayyorlangan taomlar va har bir mehmon uchun maxsus e'tibor.</p>
+</div>
+
+<!-- Stats -->
+<div class="stats-row">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num">15+</div>
+      <div class="stat-label">Yil tajriba</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">200+</div>
+      <div class="stat-label">Taom turi</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">50k+</div>
+      <div class="stat-label">Mehmonlar</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">4.9⭐</div>
+      <div class="stat-label">Reyting</div>
+    </div>
+  </div>
+</div>
+
+<!-- Story -->
+<section class="story-section">
+  <div class="story-grid">
+    <div class="story-img">
+      <div class="story-img-main">🍽️</div>
+      <div class="story-img-badge">
+        <div class="badge-num">2009</div>
+        <div class="badge-label">Tashkil topgan</div>
+      </div>
+    </div>
+    <div class="story-content">
+      <div class="story-tag">✨ Bizning hikoyamiz</div>
+      <h2 class="story-title">An'ana va zamonaviylikni birlashtirgan joy</h2>
+      <p class="story-text">
+        Lazzat Restaurant 2009-yilda kichkina bir orzudan boshlandi — milliy taomlarni yanada mazaliroq, 
+        yanada chiroyliroq tarzda taqdim etish. Bugun biz Toshkentning eng sevimli restoran manzillaridan biriga aylandik.
+      </p>
+      <p class="story-text">
+        Har bir taomimizda bir asrlik retsept va zamonaviy tayyorlash texnologiyasi uyg'unlashadi. 
+        Mahalliy fermalardan keltirilgan yangi mahsulotlar, ustalarning tajribali qo'llari 
+        va sizga bo'lgan e'tiborimiz — bularning barchasi Lazzat Restaurant sir-asroridir.
+      </p>
+      <a href="/menu/" class="btn-primary" style="margin-top:1rem;">🍽️ Menyuni ko'rish</a>
+    </div>
+  </div>
+</section>
+
+<!-- Values -->
+<section class="values-section">
+  <div class="values-inner">
+    <div class="values-header">
+      <h2 class="values-title">Bizning qadriyatlarimiz</h2>
+      <p class="values-sub">Har bir qarorimizda ushbu tamoyillar asosida harakat qilamiz</p>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">🌿</div>
+        <div class="value-name">Yangi mahsulotlar</div>
+        <div class="value-desc">Faqat shu kungi yangi, sifatli va ekologik mahsulotlardan foydalanamiz.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">❤️</div>
+        <div class="value-name">Yurakdan tayyorlanadi</div>
+        <div class="value-desc">Har bir taom oshpazimizning sevgisi va mehnati bilan bezatiladi.</div>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">⭐</div>
+        <div class="value-name">Sifat kafolati</div>
+        <div class="value-desc">Har bir mahsulot qat'iy sifat nazoratidan o'tadi. Kompromissiz.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="team-section">
+  <div class="team-header">
+    <div style="display:inline-block;background:rgba(201,168,76,0.12);color:var(--gold);padding:0.4rem 1rem;border-radius:50px;font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.75rem;">
+      👨‍🍳 Bizning jamoa
+    </div>
+    <h2>Restoran orqasidagi odamlar</h2>
+    <p style="color:var(--muted);max-width:480px;margin:0.5rem auto 0;line-height:1.6;font-size:0.95rem;">
+      Professional va tajribali jamoamiz sizga unutilmas tajriba yaratish uchun harakat qiladi.
+    </p>
+  </div>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar">👨‍💼</div>
+      <div class="team-body">
+        <div class="team-role">Restoran egasi</div>
+        <div class="team-name">Abdullayev Jasur</div>
+        <p class="team-bio">
+          15 yillik restoran boshqaruvi tajribasi. Mehmonlarni xursand qilish uning asosiy hayot maqsadi.
+        </p>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-avatar">👨‍🍳</div>
+      <div class="team-body">
+        <div class="team-role">Bosh Oshpaz (Povr)</div>
+        <div class="team-name">Toshmatov Sarvarbek</div>
+        <p class="team-bio">
+          20 yillik pishirish tajribasi. Milliy taomlarni zamonaviy uslubda taqdim etish ustasi.
+        </p>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-avatar">👩‍🍳</div>
+      <div class="team-body">
+        <div class="team-role">Sous-Oshpaz</div>
+        <div class="team-name">Nazarova Malika</div>
+        <p class="team-bio">
+          Shirinliklar va salqin ichimliklar bo'yicha mutaxassis. Har bir mazani muvozanatlaydi.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

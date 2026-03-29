@@ -1,0 +1,619 @@
+{% extends 'base.html' %}
+{% block title %}Lazzat Restaurant — Uyga xush kelibsiz{% endblock %}
+{% block nav_home %}active{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  background: var(--dark);
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 50%, rgba(201,168,76,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(192,57,43,0.08) 0%, transparent 50%);
+}
+
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg); opacity:0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity:0; }
+}
+
+.hero-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.3);
+  color: var(--gold);
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: fadeInDown 0.7s ease 0.2s both;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-weight: 900;
+  color: white;
+  line-height: 1.1;
+  margin: 1.25rem 0;
+  animation: fadeInDown 0.7s ease 0.4s both;
+}
+
+.hero-title .accent {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  animation: fadeInDown 0.7s ease 0.55s both;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  animation: fadeInDown 0.7s ease 0.7s both;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 3rem;
+  animation: fadeInDown 0.7s ease 0.85s both;
+}
+
+.hero-stat {
+  text-align: left;
+}
+
+.hero-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 0.2rem;
+}
+
+/* Food visual */
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeInRight 0.9s ease 0.3s both;
+}
+
+.food-showcase {
+  position: relative;
+  width: 420px;
+  height: 420px;
+}
+
+.food-circle-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%);
+  border: 1px solid rgba(201,168,76,0.15);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+.food-main {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10rem;
+  animation: floatFood 4s ease-in-out infinite;
+  filter: drop-shadow(0 20px 40px rgba(201,168,76,0.3));
+}
+
+@keyframes floatFood {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-3deg); }
+  50% { transform: translate(-50%, -55%) rotate(3deg); }
+}
+
+.food-orbit {
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  animation: orbit 12s linear infinite;
+}
+
+.orbit-item {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: var(--dark2);
+  border: 2px solid rgba(201,168,76,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.orbit-item-inner { animation: orbit 12s linear infinite reverse; }
+
+/* ===== SECTION STYLES ===== */
+.section {
+  padding: 5rem 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.section-tag {
+  display: inline-block;
+  background: rgba(201,168,76,0.12);
+  color: var(--gold);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.75rem;
+}
+
+.section-desc {
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ===== CATEGORIES GRID ===== */
+.categories-grid {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.category-pill {
+  background: white;
+  border: 2px solid var(--cream2);
+  color: var(--text);
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+
+.category-pill:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(201,168,76,0.2);
+}
+
+/* ===== POPULAR PRODUCTS ===== */
+.products-grid {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: var(--transition);
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+.product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.product-img-placeholder {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(135deg, var(--cream2), var(--cream));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+}
+
+.product-popular-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: var(--red);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-body {
+  padding: 1.25rem;
+}
+
+.product-cat {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.product-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0.3rem 0;
+}
+
+.product-desc {
+  font-size: 0.83rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.product-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.price-currency {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+}
+
+.btn-cart {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--dark);
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(201,168,76,0.4);
+}
+
+/* ===== PROMO BANNER ===== */
+.promo-banner {
+  background: linear-gradient(135deg, var(--dark2) 0%, var(--dark) 100%);
+  margin: 0;
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.08), transparent);
+}
+
+.promo-inner { position: relative; z-index: 2; }
+
+.promo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: white;
+  margin-bottom: 0.75rem;
+}
+
+.promo-sub { color: rgba(255,255,255,0.6); margin-bottom: 2rem; font-size: 1.05rem; }
+
+@keyframes fadeInDown {
+  from { opacity:0; transform: translateY(-30px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+@keyframes fadeInRight {
+  from { opacity:0; transform: translateX(50px); }
+  to { opacity:1; transform: translateX(0); }
+}
+
+@media (max-width: 900px) {
+  .hero-container { grid-template-columns: 1fr; text-align: center; }
+  .hero-cta { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .hero-visual { display: none; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles" id="particles"></div>
+
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        ✨ Xush kelibsiz, mehmon!
+      </div>
+      <h1 class="hero-title">
+        Milliy ta'mlar<br>
+        <span class="accent">Lazzat Restaurant</span>
+      </h1>
+      <p class="hero-subtitle">
+        Har bir taom — bu yurakdan tayyorlangan san'at. Narxlar bilan tanishing, stolda QR kod orqali buyurtma bering.
+      </p>
+      <div class="hero-cta">
+        <a href="/menu/" class="btn-primary">🍽️ Menyuni ko'rish</a>
+        <a href="/contact/" class="btn-outline">📞 Bog'lanish</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">15+</div>
+          <div class="hero-stat-label">Yillik tajriba</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">200+</div>
+          <div class="hero-stat-label">Taom turi</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">50k+</div>
+          <div class="hero-stat-label">Mamnun mijozlar</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="food-showcase">
+        <div class="food-circle-bg"></div>
+        <div class="food-main">🍲</div>
+        <div class="food-orbit">
+          <div class="orbit-item"><span class="orbit-item-inner">🥗</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section" style="padding-bottom:2rem;">
+  <div class="section-header">
+    <div class="section-tag">Kategoriyalar</div>
+    <h2 class="section-title">Nimani istaysiz?</h2>
+    <p class="section-desc">Sevimli taomingizni toping va buyurtma bering</p>
+  </div>
+  <div class="categories-grid">
+    <a href="/menu/" class="category-pill">🍽️ Hammasi</a>
+    {% for category in categories %}
+    <a href="/menu/?category={{ category.id }}" class="category-pill">
+      {{ category.icon }} {{ category.name }}
+    </a>
+    {% empty %}
+    <a href="/menu/" class="category-pill">🍲 Asosiy taomlar</a>
+    <a href="/menu/" class="category-pill">🥗 Salatlar</a>
+    <a href="/menu/" class="category-pill">🥤 Ichimliklar</a>
+    <a href="/menu/" class="category-pill">🍰 Shirinliklar</a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- POPULAR PRODUCTS -->
+{% if popular_products %}
+<section class="section">
+  <div class="section-header">
+    <div class="section-tag">🔥 Eng mashhur</div>
+    <h2 class="section-title">Mijozlar sevgan taomlar</h2>
+    <p class="section-desc">Eng ko'p buyurtma beriladigan mazali taomlarimiz</p>
+  </div>
+
+  <div class="products-grid">
+    {% for product in popular_products %}
+    <div class="product-card">
+      {% if product.is_popular %}
+      <div class="product-popular-badge">🔥 Popular</div>
+      {% endif %}
+
+      <a href="/product/{{ product.pk }}/" style="display:block;">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
+        {% else %}
+        <div class="product-img-placeholder">🍽️</div>
+        {% endif %}
+      </a>
+
+      <div class="product-body">
+        <div class="product-cat">{{ product.category.name }}</div>
+        <h3 class="product-name">
+          <a href="/product/{{ product.pk }}/" style="color:inherit;text-decoration:none;">{{ product.name }}</a>
+        </h3>
+        {% if product.description %}
+        <p class="product-desc">{{ product.description }}</p>
+        {% endif %}
+        <div class="product-footer">
+          <div class="product-price">
+            {{ product.formatted_price }}
+            <span class="price-currency">so'm</span>
+          </div>
+          <a href="/cart/add/{{ product.pk }}/" class="btn-cart" data-add-cart="/cart/add/{{ product.pk }}/">
+            🛒 Qo'sh
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<!-- PROMO BANNER -->
+<section class="promo-banner">
+  <div class="promo-inner">
+    <h2 class="promo-title">Stolda QR Kod bor?</h2>
+    <p class="promo-sub">Skanerlang va barcha narxlarni ko'ring — xizmatchi kutmay turib!</p>
+    <a href="/menu/" class="btn-primary" style="font-size:1rem;padding:1rem 2.5rem;">
+      🍽️ Menyuni Ko'rish
+    </a>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Particle animation
+const container = document.getElementById('particles');
+for (let i = 0; i < 20; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+  p.style.animationDelay = (Math.random() * 15) + 's';
+  p.style.width = p.style.height = (Math.random() * 4 + 2) + 'px';
+  p.style.opacity = Math.random() * 0.5;
+  container.appendChild(p);
+}
+
+// Intersection Observer for card animations
+const cards = document.querySelectorAll('.product-card, .category-pill');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      entry.target.style.animation = `fadeInDown 0.5s ease ${i * 0.08}s both`;
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+cards.forEach(card => observer.observe(card));
+</script>
+{% endblock %}

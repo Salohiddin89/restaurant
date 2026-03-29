@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Lazzat Restaurant{% endblock %}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --dark: #1A1008;
+  --dark2: #2C1F0E;
+  --cream: #FDF6E9;
+  --cream2: #F5EDD8;
+  --red: #C0392B;
+  --green: #27AE60;
+  --text: #3D2B1F;
+  --muted: #8B7355;
+  --white: #FFFFFF;
+  --shadow: 0 8px 32px rgba(26,16,8,0.15);
+  --radius: 16px;
+  --transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(26,16,8,0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+  transition: var(--transition);
+}
+
+.nav-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logo-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.logo-sub {
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+  position: relative;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: var(--gold);
+  background: rgba(201,168,76,0.1);
+}
+
+.nav-cart {
+  position: relative;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--dark) !important;
+  padding: 0.5rem 1.2rem !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cart-badge {
+  background: var(--red);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 20px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Mobile menu */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  background: rgba(26,16,8,0.98);
+  backdrop-filter: blur(20px);
+  padding: 1rem;
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+  z-index: 999;
+}
+
+.mobile-menu.open { display: block; }
+
+.mobile-menu a {
+  display: block;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.mobile-menu a:hover { color: var(--gold); background: rgba(201,168,76,0.1); }
+
+/* ===== MESSAGES ===== */
+.messages-container {
+  position: fixed;
+  top: 90px;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.alert {
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  animation: slideInRight 0.4s ease;
+  max-width: 360px;
+  box-shadow: var(--shadow);
+}
+
+.alert-success { background: var(--green); color: white; }
+.alert-error { background: var(--red); color: white; }
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity:0; }
+  to { transform: translateX(0); opacity:1; }
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--dark);
+  color: rgba(255,255,255,0.7);
+  padding: 4rem 0 0;
+  margin-top: 5rem;
+}
+
+.footer-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+}
+
+.footer-brand .logo-name { font-size: 1.6rem; }
+
+.footer-desc {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.footer-contacts {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.footer-contact-item i { color: var(--gold); width: 16px; }
+
+.footer-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin-bottom: 1.25rem;
+}
+
+.footer-links-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.footer-links-list a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-links-list a:hover { color: var(--gold); padding-left: 4px; }
+
+.social-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.social-link {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(201,168,76,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: var(--transition);
+}
+
+.social-link:hover {
+  background: var(--gold);
+  color: var(--dark);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.footer-bottom {
+  margin-top: 3rem;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding: 1.25rem 2rem;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--muted);
+  max-width: 1300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--dark);
+  border: none;
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(201,168,76,0.4);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: transparent;
+  color: var(--gold);
+  border: 1.5px solid var(--gold);
+  padding: 0.8rem 1.8rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-outline:hover {
+  background: var(--gold);
+  color: var(--dark);
+  transform: translateY(-2px);
+}
+
+/* ===== PAGE WRAPPER ===== */
+.page-content { padding-top: 72px; }
+
+/* ===== TOAST NOTIFICATION ===== */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--dark);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 14px;
+  border-left: 4px solid var(--gold);
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  z-index: 9999;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+}
+</style>
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-logo">
+      <div class="logo-icon">🍴</div>
+      <div class="logo-text">
+        <span class="logo-name">Lazzat</span>
+        <span class="logo-sub">Restaurant</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="/" class="{% block nav_home %}{% endblock %}">🏠 Home</a></li>
+      <li><a href="/menu/" class="{% block nav_menu %}{% endblock %}">🍽️ Menu</a></li>
+      <li><a href="/about/" class="{% block nav_about %}{% endblock %}">⭐ Biz haqimizda</a></li>
+      <li><a href="/contact/" class="{% block nav_contact %}{% endblock %}">✉️ Xabar</a></li>
+      <li>
+        <a href="/cart/" class="nav-cart">
+          🛒 Savat
+          <span class="cart-badge" id="cart-count">{{ request.session.cart|length|default:0 }}</span>
+        </a>
+      </li>
+    </ul>
+
+    <div class="hamburger" onclick="toggleMobile()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/">🏠 Home</a>
+  <a href="/menu/">🍽️ Menu</a>
+  <a href="/about/">⭐ Biz haqimizda</a>
+  <a href="/contact/">✉️ Xabar qoldirish</a>
+  <a href="/cart/">🛒 Savat</a>
+</div>
+
+<!-- MESSAGES -->
+{% if messages %}
+<div class="messages-container">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}" id="alert-{{ forloop.counter }}">
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div class="page-content">
+  {% block content %}{% endblock %}
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo" style="text-decoration:none;">
+        <div class="logo-icon">🍴</div>
+        <div class="logo-text">
+          <span class="logo-name">Lazzat</span>
+          <span class="logo-sub">Restaurant</span>
+        </div>
+      </div>
+      <p class="footer-desc">
+        Har bir taomimizda sevgi va an'ana bor. Siz bilan bo'lishga doim tayyormiz.
+      </p>
+      <div class="footer-contacts">
+        <div class="footer-contact-item">
+          <i class="fas fa-phone"></i>
+          <span>+998 90 123 45 67</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Toshkent sh., Mustaqillik ko'chasi 15</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-clock"></i>
+          <span>09:00 – 23:00 (Har kuni)</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="footer-title">Navigatsiya</div>
+      <ul class="footer-links-list">
+        <li><a href="/"><i class="fas fa-chevron-right"></i> Home</a></li>
+        <li><a href="/menu/"><i class="fas fa-chevron-right"></i> Menu</a></li>
+        <li><a href="/about/"><i class="fas fa-chevron-right"></i> Biz haqimizda</a></li>
+        <li><a href="/contact/"><i class="fas fa-chevron-right"></i> Xabar qoldirish</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-title">Ijtimoiy tarmoqlar</div>
+      <div class="social-links">
+        <a href="https://t.me/lazzat_restaurant" class="social-link" target="_blank">
+          <i class="fab fa-telegram"></i>
+        </a>
+        <a href="https://instagram.com/lazzat_restaurant" class="social-link" target="_blank">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="tel:+998901234567" class="social-link">
+          <i class="fas fa-phone"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    © 2025 Lazzat Restaurant — Barcha huquqlar himoyalangan
+  </div>
+</footer>
+
+<script>
+function toggleMobile() {
+  const m = document.getElementById('mobileMenu');
+  m.classList.toggle('open');
+}
+
+// Auto-hide alerts
+document.querySelectorAll('.alert').forEach((el, i) => {
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(100%)';
+    setTimeout(() => el.remove(), 400);
+  }, 4000 + i * 500);
+});
+
+// Toast notification
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// Cart badge update
+function updateCartBadge(count) {
+  const badge = document.getElementById('cart-count');
+  if (badge) {
+    badge.textContent = count;
+    badge.style.transform = 'scale(1.4)';
+    setTimeout(() => badge.style.transform = 'scale(1)', 300);
+  }
+}
+
+// Add to cart via AJAX
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-add-cart]');
+  if (!btn) return;
+  e.preventDefault();
+  const url = btn.dataset.addCart;
+  fetch(url, {
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    method: 'GET',
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      updateCartBadge(data.total_items);
+      showToast('🛒 ' + data.message);
+    }
+  })
+  .catch(() => { window.location.href = url; });
+});
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > 50) {
+    nav.style.background = 'rgba(26,16,8,0.98)';
+  } else {
+    nav.style.background = 'rgba(26,16,8,0.95)';
+  }
+});
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

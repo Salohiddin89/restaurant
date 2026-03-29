@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} — Lazzat Restaurant{% endblock %}
+{% block nav_menu %}active{% endblock %}
+
+{% block extra_css %}
+<style>
+.detail-section {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+.breadcrumb a { color: var(--gold); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.detail-img-wrap {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, var(--cream2), var(--cream));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-img-placeholder { font-size: 8rem; }
+
+.detail-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(201,168,76,0.12);
+  color: var(--gold);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.detail-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  color: var(--dark);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.detail-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 1.5rem;
+}
+
+.detail-price span {
+  font-size: 1rem;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+}
+
+.detail-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--gold);
+  padding-left: 1.25rem;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.qty-selector {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 2px solid var(--cream2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.qty-btn {
+  width: 44px;
+  height: 44px;
+  background: var(--cream2);
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:hover { background: var(--gold); color: var(--dark); }
+.qty-num { padding: 0 1rem; font-weight: 700; font-size: 1rem; }
+
+/* Related */
+.related-section {
+  max-width: 1100px;
+  margin: 0 auto 4rem;
+  padding: 0 2rem;
+}
+
+.related-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--cream2);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.related-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  transition: var(--transition);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.related-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+
+.related-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.related-placeholder {
+  width: 100%;
+  height: 140px;
+  background: var(--cream2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.related-body { padding: 1rem; }
+.related-name { font-weight: 600; font-size: 0.95rem; color: var(--dark); }
+.related-price { color: var(--green); font-weight: 700; font-size: 0.9rem; margin-top: 0.25rem; }
+
+@media (max-width: 768px) {
+  .detail-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="detail-section">
+  <div class="breadcrumb">
+    <a href="/">Home</a> ›
+    <a href="/menu/">Menyu</a> ›
+    <a href="/menu/?category={{ product.category.id }}">{{ product.category.name }}</a> ›
+    <span>{{ product.name }}</span>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-img-wrap">
+      {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% else %}
+      <div class="detail-img-placeholder">{{ product.category.icon }}</div>
+      {% endif %}
+    </div>
+
+    <div class="detail-info">
+      <div class="detail-category">{{ product.category.icon }} {{ product.category.name }}</div>
+      <h1 class="detail-name">{{ product.name }}</h1>
+      <div class="detail-price">
+        {{ product.formatted_price }} <span>so'm</span>
+      </div>
+
+      {% if product.description %}
+      <p class="detail-desc">{{ product.description }}</p>
+      {% endif %}
+
+      <div class="detail-actions">
+        <a href="/cart/add/{{ product.pk }}/" class="btn-primary" data-add-cart="/cart/add/{{ product.pk }}/">
+          🛒 Savatga qo'shish
+        </a>
+        <a href="/menu/?category={{ product.category.id }}" class="btn-outline">
+          ← Orqaga
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if related %}
+<section class="related-section">
+  <div class="related-title">{{ product.category.icon }} Shuningdek ko'ring</div>
+  <div class="related-grid">
+    {% for item in related %}
+    <a href="/product/{{ item.pk }}/" class="related-card">
+      {% if item.image %}
+      <img src="{{ item.image.url }}" alt="{{ item.name }}" class="related-img">
+      {% else %}
+      <div class="related-placeholder">{{ item.category.icon }}</div>
+      {% endif %}
+      <div class="related-body">
+        <div class="related-name">{{ item.name }}</div>
+        <div class="related-price">{{ item.formatted_price }} so'm</div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
